@@ -34,7 +34,7 @@ class JWTDriverConfig: WebSecurityConfigurerAdapter() {
             .addFilterAt(authenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .authorizeRequests()
             .antMatchers(HttpMethod.POST, *postDriverPermit.toTypedArray()).permitAll()
-            .antMatchers(HttpMethod.GET, *GetDriverPermit.toTypedArray()).permitAll()
+            .antMatchers(HttpMethod.POST, *postCustomerPermit.toTypedArray()).permitAll()
             .anyRequest().authenticated()
     }
 
@@ -44,18 +44,18 @@ class JWTDriverConfig: WebSecurityConfigurerAdapter() {
             "/driver/register"
         )
 
-        val GetDriverPermit = listOf<String>(
-            "/driver/ping"
+        val postCustomerPermit = listOf<String>(
+            "/customer/register",
+            "/customer/login"
         )
 
-        fun generateToken(driverDatabase: DriverDatabase): String {
-            val subject = driverDatabase.id
+        fun generateToken(id: String, username: String): String {
             val expired = Date(System.currentTimeMillis() + (60_000 * 60 * 24))
-            val granted = AuthorityUtils.commaSeparatedStringToAuthorityList(driverDatabase.username)
+            val granted = AuthorityUtils.commaSeparatedStringToAuthorityList(username)
             val grantedStream = granted.stream().map { it.authority }.collect(Collectors.toList())
 
             return Jwts.builder()
-                .setSubject(subject)
+                .setSubject(id)
                 .claim(Constant.CLAIMS, grantedStream)
                 .setExpiration(expired)
                 .signWith(Keys.hmacShaKeyFor(Constant.SECRETS.toByteArray()), SignatureAlgorithm.HS256)
@@ -64,8 +64,7 @@ class JWTDriverConfig: WebSecurityConfigurerAdapter() {
 
         fun isPermited(request: HttpServletRequest): Boolean {
             val path = request.servletPath
-            println("hasilnya adalah " + postDriverPermit.contains(path))
-                return postDriverPermit.contains(path)
+            return postDriverPermit.contains(path) or postCustomerPermit.contains(path)
         }
     }
 }

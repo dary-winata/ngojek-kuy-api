@@ -1,0 +1,33 @@
+name: Heroku Deployment
+
+on:
+  push:
+    branches: [Main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          version: '17'
+      - name: Create heroku config file
+        run: |
+          cat >~/.netrc << EOF
+          machine api.heroku.com
+            login ${{secrets.HEROKU_API}}
+            password ${{secrets.HEROKU_API_KEY}}
+          machine git.heroku.com
+            login ${{secrets.HEROKU_EMAIL}}
+            password ${{secrets.HEROKU_API_KEY}}
+          EOF
+      - name: add heroku remote
+        run: heroku git:remote --app=${{secrets.HEROKU_APP_NAME}}
+      - name: setup heroku env
+        run: heroku config:set DATABASE_URL=${{secrets.MONGO_URL}}
+      - name: push heroku to master
+        run: |
+          git fetch --unshallow origin
+          git push heroku master

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import aej.finalproject.ngojekkuy.toResponse
-import org.springframework.security.core.context.SecurityContextHolder
 
 @RestController
 @RequestMapping("/driver")
@@ -41,10 +40,5 @@ class DriverController {
     @PostMapping("/login")
     fun loginDriver(@RequestBody driverLogin: DriverLogin): BaseResponse<LoginResponse> {
         return driverService.login(driverLogin).toResponse()
-    }
-
-    @GetMapping("/ping")
-    fun ping(): String {
-        return "ping"
     }
 }

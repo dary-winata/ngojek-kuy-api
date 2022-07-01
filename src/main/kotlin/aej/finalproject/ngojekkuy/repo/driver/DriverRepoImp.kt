@@ -1,4 +1,4 @@
-package aej.finalproject.ngojekkuy.repo
+package aej.finalproject.ngojekkuy.repo.driver
 
 import aej.finalproject.ngojekkuy.database.DatabaseComponent
 import aej.finalproject.ngojekkuy.error.ErrorException
@@ -10,7 +10,6 @@ import org.litote.kmongo.findOne
 import org.litote.kmongo.getCollection
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Repository
-import java.sql.Driver
 import java.util.UUID
 
 @Repository
