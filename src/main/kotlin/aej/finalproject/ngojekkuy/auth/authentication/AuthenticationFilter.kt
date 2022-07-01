@@ -3,12 +3,9 @@ package aej.finalproject.ngojekkuy.auth.authentication
 import aej.finalproject.ngojekkuy.auth.jwt.JWTDriverConfig
 import aej.finalproject.ngojekkuy.error.ErrorException
 import aej.finalproject.ngojekkuy.global.Constant
-import aej.finalproject.ngojekkuy.model.BaseResponse
-import aej.finalproject.ngojekkuy.service.driver.DriverService
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.UnsupportedJwtException
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder

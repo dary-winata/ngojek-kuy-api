@@ -1,4 +1,4 @@
-package aej.finalproject.ngojekkuy.repo
+package aej.finalproject.ngojekkuy.repo.driver
 
 import aej.finalproject.ngojekkuy.model.driver.DriverDatabase
 import aej.finalproject.ngojekkuy.model.driver.DriverRequest

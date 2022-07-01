@@ -6,7 +6,7 @@ import aej.finalproject.ngojekkuy.model.LoginResponse
 import aej.finalproject.ngojekkuy.model.driver.DriverDatabase
 import aej.finalproject.ngojekkuy.model.driver.DriverLogin
 import aej.finalproject.ngojekkuy.model.driver.DriverRequest
-import aej.finalproject.ngojekkuy.repo.DriverRepo
+import aej.finalproject.ngojekkuy.repo.driver.DriverRepo
 import aej.finalproject.ngojekkuy.toResult
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -35,7 +35,7 @@ class DriverServiceImp: DriverService {
             return throw ErrorException("Username atau password tidak ada")
 
         return getUser.toResult().map {
-            val token = JWTDriverConfig.generateToken(it)
+            val token = JWTDriverConfig.generateToken(it.id, it.username)
             LoginResponse(token)
         }
     }
