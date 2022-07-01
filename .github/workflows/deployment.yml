@@ -17,7 +17,7 @@ jobs:
         run: |
           cat >~/.netrc << EOF
           machine api.heroku.com
-            login ${{secrets.HEROKU_API}}
+            login ${{secrets.HEROKU_EMAIL}}
             password ${{secrets.HEROKU_API_KEY}}
           machine git.heroku.com
             login ${{secrets.HEROKU_EMAIL}}
