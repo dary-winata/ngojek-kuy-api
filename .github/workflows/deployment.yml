@@ -28,4 +28,6 @@ jobs:
       - name: setup heroku env
         run: heroku config:set DATABASE_URL=${{secrets.MONGO_URL}}
       - name: push heroku to master
-        run: git push heroku HEAD:master
+        run: |
+          git fetch --unshallow origin
+          git push heroku HEAD:master
