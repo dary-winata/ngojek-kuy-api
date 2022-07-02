@@ -6,7 +6,11 @@ import org.springframework.stereotype.Component
 
 @Component
 class DatabaseComponent {
-    private val mongoUrl = System.getenv("DATABASE_URL")
+    private val mongoUrl = System.getenv("DATABASE_URL").replace("\"", "")
 
     val database: MongoClient = KMongo.createClient(mongoUrl)
+
+    init {
+        println("cek database -> $mongoUrl")
+    }
 }
