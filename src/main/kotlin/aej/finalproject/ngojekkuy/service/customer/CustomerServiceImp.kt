@@ -24,10 +24,10 @@ class CustomerServiceImp: CustomerService {
     override fun login(customerLogin: CustomerLogin): Result<LoginResponse> {
         val user = customerRepository.getCustomerByUsername(customerLogin.username)
         if (user.password != customerLogin.password)
-            throw ErrorException("Wrong password")
+            throw ErrorException("Wrong password or Username")
 
         return user.toResult().map {
-            val token = JWTDriverConfig.generateToken(it.id, it.username)
+            val token = JWTDriverConfig.generateToken(it.id, it.username, "CUSTOMER_ROLE")
             LoginResponse(token)
         }
     }

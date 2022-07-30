@@ -20,11 +20,7 @@ class DriverRepoImp: DriverRepo {
     private fun getDriverCollection() =
         databaseComponent.database.getDatabase("ngojek-kuy").getCollection<DriverDatabase>()
 
-    override fun getDrivers(): List<DriverDatabase> {
-        return getDriverCollection().find().toList()
-    }
-
-    override fun getDriverByName(username: String): DriverDatabase? {
+    override fun getDriverByUsername(username: String): DriverDatabase? {
         return getDriverCollection().findOne { DriverDatabase::username eq username }
     }
 
@@ -33,7 +29,7 @@ class DriverRepoImp: DriverRepo {
     }
 
     override fun addDriver(driverRequest: DriverRequest): DriverDatabase {
-        if(getDriverByName(driverRequest.username) != null)
+        if(getDriverByUsername(driverRequest.username) != null)
             throw ErrorException("Username sudah terpakai")
 
         val driverDatabase = DriverDatabase(

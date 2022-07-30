@@ -33,30 +33,41 @@ class JWTDriverConfig: WebSecurityConfigurerAdapter() {
             .csrf().disable()
             .addFilterAt(authenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
             .authorizeRequests()
-            .antMatchers(HttpMethod.POST, *postDriverPermit.toTypedArray()).permitAll()
-            .antMatchers(HttpMethod.POST, *postCustomerPermit.toTypedArray()).permitAll()
+            .antMatchers(HttpMethod.GET, *getDriverPermitRole.toTypedArray()).hasRole("DRIVER_ROLE")
+            .antMatchers(HttpMethod.GET, *getCustomerPermitRole.toTypedArray()).hasRole("CUSTOMER_ROLE")
+            .antMatchers(HttpMethod.POST, *postDriverCustomerPermit.toTypedArray()).permitAll()
             .anyRequest().authenticated()
     }
 
     companion object {
-        val postDriverPermit = listOf<String>(
+        val postDriverCustomerPermit = listOf<String>(
             "/driver/login",
-            "/driver/register"
-        )
-
-        val postCustomerPermit = listOf<String>(
+            "/driver/register",
             "/customer/register",
             "/customer/login"
         )
 
-        fun generateToken(id: String, username: String): String {
+        val getPermit = listOf<String>(
+            "/loc/route",
+            "/loc/reverse"
+        )
+
+        val getDriverPermitRole = listOf<String>(
+            "/driver/{\\d+}"
+        )
+
+        val getCustomerPermitRole = listOf<String>(
+            "/customer/{\\d+}"
+        )
+
+        fun generateToken(id: String, username: String, role: String): String {
             val expired = Date(System.currentTimeMillis() + (60_000 * 60 * 24))
             val granted = AuthorityUtils.commaSeparatedStringToAuthorityList(username)
             val grantedStream = granted.stream().map { it.authority }.collect(Collectors.toList())
 
             return Jwts.builder()
                 .setSubject(id)
-                .claim(Constant.CLAIMS, grantedStream)
+                .claim(role, grantedStream)
                 .setExpiration(expired)
                 .signWith(Keys.hmacShaKeyFor(Constant.SECRETS.toByteArray()), SignatureAlgorithm.HS256)
                 .compact()
@@ -64,7 +75,7 @@ class JWTDriverConfig: WebSecurityConfigurerAdapter() {
 
         fun isPermited(request: HttpServletRequest): Boolean {
             val path = request.servletPath
-            return postDriverPermit.contains(path) or postCustomerPermit.contains(path)
+            return postDriverCustomerPermit.contains(path)
         }
     }
 }

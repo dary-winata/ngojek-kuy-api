@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.annotation.security.RolesAllowed
 
 @RestController
 @RequestMapping("/customer")
@@ -24,16 +25,10 @@ class CustomerController {
     @Autowired
     private lateinit var customerService: CustomerService
 
-//    @GetMapping
-//    fun getUser(): BaseResponse<Result<CustomerDatabase>> {
-//        return BaseResponse(
-//            status = true,
-//            message = "Success",
-//            data = Result(
-//                customerService.getUserByUsername()
-//            )
-//        )
-//    }
+    @GetMapping("/{username}")
+    fun getUser(@PathVariable username: String): BaseResponse<CustomerDatabase> {
+        return customerService.getUserByUsername(username).toResponse()
+    }
 
     @PostMapping("/register")
     fun registerCustomer(@RequestBody customerRequest: CustomerRequest): BaseResponse<CustomerDatabase> {

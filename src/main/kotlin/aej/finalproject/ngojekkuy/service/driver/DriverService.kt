@@ -6,7 +6,7 @@ import aej.finalproject.ngojekkuy.model.driver.DriverLogin
 import aej.finalproject.ngojekkuy.model.driver.DriverRequest
 
 interface DriverService {
-    fun getDrivers(): Result<List<DriverDatabase>>
+    fun getDriversByUsername(username: String): Result<DriverDatabase>
     fun register(driverRequest: DriverRequest): Result<DriverDatabase>
     fun updateDriver(driverRequest: DriverRequest, id: String): Result<DriverDatabase>
     fun login(driverLogin: DriverLogin): Result<LoginResponse>

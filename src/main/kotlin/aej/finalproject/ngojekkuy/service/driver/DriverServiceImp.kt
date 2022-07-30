@@ -2,10 +2,12 @@ package aej.finalproject.ngojekkuy.service.driver
 
 import aej.finalproject.ngojekkuy.auth.jwt.JWTDriverConfig
 import aej.finalproject.ngojekkuy.error.ErrorException
+import aej.finalproject.ngojekkuy.global.GlobalVariable
 import aej.finalproject.ngojekkuy.model.LoginResponse
 import aej.finalproject.ngojekkuy.model.driver.DriverDatabase
 import aej.finalproject.ngojekkuy.model.driver.DriverLogin
 import aej.finalproject.ngojekkuy.model.driver.DriverRequest
+import aej.finalproject.ngojekkuy.orThrow
 import aej.finalproject.ngojekkuy.repo.driver.DriverRepo
 import aej.finalproject.ngojekkuy.toResult
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,8 +18,8 @@ class DriverServiceImp: DriverService {
     @Autowired
     private lateinit var driverRepo: DriverRepo
 
-    override fun getDrivers(): Result<List<DriverDatabase>> {
-        return driverRepo.getDrivers().toResult()
+    override fun getDriversByUsername(username: String): Result<DriverDatabase> {
+        return driverRepo.getDriverByUsername(username).orThrow("user not found").toResult()
     }
 
     override fun register(driverRequest: DriverRequest): Result<DriverDatabase> {
@@ -29,13 +31,14 @@ class DriverServiceImp: DriverService {
     }
 
     override fun login(driverLogin: DriverLogin): Result<LoginResponse> {
-        val getUser = driverRepo.getDriverByName(driverLogin.username)
+        val getUser = driverRepo.getDriverByUsername(driverLogin.username)
 
         if(getUser == null || getUser.password != driverLogin.password)
             return throw ErrorException("Username atau password tidak ada")
 
         return getUser.toResult().map {
-            val token = JWTDriverConfig.generateToken(it.id, it.username)
+            GlobalVariable.ROLE = "DRIVER_ROLE"
+            val token = JWTDriverConfig.generateToken(it.id, it.username, "DRIVER_ROLE")
             LoginResponse(token)
         }
     }

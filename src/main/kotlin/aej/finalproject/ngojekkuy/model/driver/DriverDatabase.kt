@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 
 data class DriverDatabase(
     val id: String = "",
-    var username: String ="",
-    var password: String = "",
-    var name: String = ""
+    val username: String ="",
+    val password: String = "",
+    val name: String = ""
 )

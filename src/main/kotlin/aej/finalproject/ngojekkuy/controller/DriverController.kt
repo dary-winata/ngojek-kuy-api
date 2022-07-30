@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import aej.finalproject.ngojekkuy.toResponse
+import org.springframework.web.bind.annotation.RequestParam
+import javax.annotation.security.RolesAllowed
 
 @RestController
 @RequestMapping("/driver")
@@ -22,9 +24,9 @@ class DriverController {
     @Autowired
     private lateinit var driverService: DriverService
 
-    @GetMapping
-    fun getDrivers(): BaseResponse<List<DriverDatabase>>{
-        return driverService.getDrivers().toResponse()
+    @GetMapping("/{username}")
+    fun getDrivers(@PathVariable username: String): BaseResponse<DriverDatabase>{
+        return driverService.getDriversByUsername(username).toResponse()
     }
 
     @PostMapping("/register")
