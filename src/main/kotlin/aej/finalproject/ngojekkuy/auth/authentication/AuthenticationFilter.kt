@@ -3,7 +3,6 @@ package aej.finalproject.ngojekkuy.auth.authentication
 import aej.finalproject.ngojekkuy.auth.jwt.JWTDriverConfig
 import aej.finalproject.ngojekkuy.error.ErrorException
 import aej.finalproject.ngojekkuy.global.Constant
-import aej.finalproject.ngojekkuy.global.GlobalVariable
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.UnsupportedJwtException
@@ -30,7 +29,7 @@ class AuthenticationFilter: OncePerRequestFilter() {
                 filterChain.doFilter(request, response)
             else {
                 val claims = validate(request)
-                if(claims[GlobalVariable.ROLE] != null) {
+                if(claims[Constant.AUTH] != null) {
                     setupAuthentication(claims) {
                         filterChain.doFilter(request, response)
                     }
@@ -60,7 +59,7 @@ class AuthenticationFilter: OncePerRequestFilter() {
     }
 
     private fun setupAuthentication(claims: Claims, doOnNext: () -> Unit) {
-        val authorities = claims[GlobalVariable.ROLE] as List<String>
+        val authorities = claims[Constant.AUTH] as List<String>
         val authStream = authorities.stream().map { SimpleGrantedAuthority(it) }.collect(Collectors.toList())
 
         val auth = UsernamePasswordAuthenticationToken(claims.subject, null, authStream)

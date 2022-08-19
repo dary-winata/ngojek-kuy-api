@@ -3,7 +3,7 @@ package aej.finalproject.ngojekkuy.location.controller
 import aej.finalproject.ngojekkuy.location.service.LocationService
 import aej.finalproject.ngojekkuy.location.entity.Location
 import aej.finalproject.ngojekkuy.location.entity.LocationRoute
-import aej.finalproject.ngojekkuy.model.BaseResponse
+import aej.finalproject.ngojekkuy.user.model.BaseResponse
 import aej.finalproject.ngojekkuy.toCoordinate
 import aej.finalproject.ngojekkuy.toResponse
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,7 +22,7 @@ class LocationController {
     fun searchLocation(
         @RequestParam name: String,
         @RequestParam coordinate: String
-    ): BaseResponse<List<Location>>{
+    ): BaseResponse<List<Location>> {
         val coordinateValue = coordinate.toCoordinate()
 
         return locationService.searchLocation(name, coordinateValue).toResponse()

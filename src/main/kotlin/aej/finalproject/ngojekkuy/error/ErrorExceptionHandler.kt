@@ -1,6 +1,6 @@
 package aej.finalproject.ngojekkuy.error
 
-import aej.finalproject.ngojekkuy.model.BaseResponse
+import aej.finalproject.ngojekkuy.user.model.BaseResponse
 import io.jsonwebtoken.UnsupportedJwtException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity

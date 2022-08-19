@@ -2,7 +2,7 @@ package aej.finalproject.ngojekkuy
 
 import aej.finalproject.ngojekkuy.error.ErrorException
 import aej.finalproject.ngojekkuy.location.entity.Coordinate
-import aej.finalproject.ngojekkuy.model.BaseResponse
+import aej.finalproject.ngojekkuy.user.model.BaseResponse
 
 inline fun <reified T> T.toResult(message: String = "${T::class.simpleName} is null"): Result<T> {
     return if(this != null) {
